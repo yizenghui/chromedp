@@ -658,6 +658,21 @@ func Text(sel interface{}, text *string, opts ...QueryOption) QueryAction {
 	}, opts...)
 }
 
+// Body is an element query action that retrieves the visible text of the first element
+// node matching the selector.
+func Body(sel interface{}, text *string, opts ...QueryOption) QueryAction {
+	if text == nil {
+		panic("text cannot be nil")
+	}
+
+	return QueryAfter(sel, func(ctx context.Context, nodes ...*cdp.Node) error {
+		if len(nodes) < 1 {
+			return fmt.Errorf("selector %q did not return any nodes", sel)
+		}
+
+		return EvaluateAsDevTools(snippet(htmlJS, cashX(false), sel, nodes[0]), text).Do(ctx)
+	}, opts...)
+}
 // TextContent is an element query action that retrieves the text content of the first element
 // node matching the selector.
 func TextContent(sel interface{}, text *string, opts ...QueryOption) QueryAction {

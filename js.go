@@ -87,6 +87,16 @@ const (
 	visibleJS = `(function(a) {
 		return Boolean( a.offsetWidth || a.offsetHeight || a.getClientRects().length );
 	})(%s)`
+
+	htmlJS = `(function(a) {
+		var s = '';
+		for (var i = 0; i < a.length; i++) {
+			if (a[i].offsetWidth || a[i].offsetHeight || a[i].getClientRects().length) {
+				s += a[i].innerHTML;
+			}
+		}
+		return s;
+	})(%s)`
 )
 
 // snippet builds a Javascript expression snippet.
